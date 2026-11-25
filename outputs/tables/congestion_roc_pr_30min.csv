@@ -1,0 +1,6 @@
+Model,ROC_AUC_30min,PR_AUC_30min
+1_BuiltIn_LSTM,0.9494,0.8134
+2_BuiltIn_GRU_Attn,0.9488,0.8123
+3_BuiltIn_Transformer,0.9548,0.8374
+4_Proposed_RA_DynSTGCN,0.9599,0.8523
+5_HorizonAdaptive_Ensemble,0.9561,0.8413
