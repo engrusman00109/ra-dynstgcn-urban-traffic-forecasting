@@ -71,53 +71,8 @@ Given historical traffic observations $\mathbf{X}^{(t - T_p + 1 : t)} \in \mathb
 ## System Architecture & Visual Diagram
 
 The system is structured into four modular stages: **Data Acquisition & Graph Builder**, **ST-GNN Spatio-Temporal Encoder-Decoder**, **Multi-Horizon Traffic Predictor**, and **Intelligent Driving Assistance (ADAS) Interface**.
+<img width="2900" height="1360" alt="image" src="https://github.com/user-attachments/assets/20cc8f39-0f53-4e6c-8277-032f0ba98e9b" />
 
-```
-+---------------------------------------------------------------------------------------------------+
-|                        SPATIO-TEMPORAL TRAFFIC & ADAS PIPELINE ARCHITECTURE                       |
-+---------------------------------------------------------------------------------------------------+
-|                                                                                                   |
-|  [METR-LA & PEMS-BAY]      [Sensor Coordinates & Road Distances]                                   |
-|   (5-Min Speed/Flow)  --->   (Pairwise Road Network Distances)                                   |
-|          |                                 |                                                      |
-|          v                                 v                                                      |
-|  +---------------------------------------------------------------------------------------------+  |
-|  | 1. DATA PREPROCESSING & GRAPH CONSTRUCTION                                                  |  |
-|  |    - Missing value imputation & Z-score normalization                                       |  |
-|  |    - Time-of-day / day-of-week feature encoding                                             |  |
-|  |    - Gaussian kernel thresholded Adjacency Matrix A (N x N)                                 |  |
-|  |    - Sliding window tensors: X in R^(N x Tp x F)  -->  Y in R^(N x Tf)                     |  |
-|  +---------------------------------------------------------------------------------------------+  |
-|          |                                                                                        |
-|          v                                                                                        |
-|  +---------------------------------------------------------------------------------------------+  |
-|  | 2. ST-GNN CORE BLOCKS (Stacked L Layers)                                                    |  |
-|  |    +---------------------------------------+   +----------------------------------------+   |  |
-|  |    | Spatial Graph Module                  |   | Temporal Sequence Module               |   |  |
-|  |    | - Message passing / Diffusion conv    |-->| - Gated / Recurrent / Temporal conv    |   |  |
-|  |    | - Captures upstream/downstream flow   |   | - Captures diurnal & shockwave trends  |   |  |
-|  |    +---------------------------------------+   +----------------------------------------+   |  |
-|  |                         \                                   /                                 |  |
-|  |                          +-------> Residual & LayerNorm <--+                                  |  |
-|  +---------------------------------------------------------------------------------------------+  |
-|          |                                                                                        |
-|          v                                                                                        |
-|  +---------------------------------------------------------------------------------------------+  |
-|  | 3. MULTI-HORIZON FORECASTING HEAD                                                           |  |
-|  |    - Predicts future speeds/flows across all N sensors for horizons t+1 ... t+Tf             |  |
-|  |    - Computes spatial speed drops (dV/dx) & temporal deceleration (dV/dt)                   |  |
-|  +---------------------------------------------------------------------------------------------+  |
-|          |                                                                                        |
-|          v                                                                                        |
-|  +---------------------------------------------------------------------------------------------+  |
-|  | 4. INTELLIGENT DRIVING ASSISTANCE (ADAS) MODULE                                             |  |
-|  |    - Bottleneck / Shockwave Ahead Warning (lookahead risk score along planned path)          |  |
-|  |    - Smooth Speed Advisory / Eco-Cruise Profile (prevents abrupt braking in queues)            |  |
-|  |    - Adaptive Following / Corridor & Lane Guidance Cues                                     |  |
-|  +---------------------------------------------------------------------------------------------+  |
-+---------------------------------------------------------------------------------------------------+
-
-```
 
 ## Data Acquisition
 
